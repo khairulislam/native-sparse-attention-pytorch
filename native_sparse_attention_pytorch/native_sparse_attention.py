@@ -8,7 +8,7 @@ import torch.nn.functional as F
 from torch import nn, arange, stack, cat, tensor, Tensor
 from torch.nn import Module, ModuleList
 
-from local_attention import LocalAttention
+from local_attention.local_attention import LocalAttention
 
 from rotary_embedding_torch import RotaryEmbedding
 
