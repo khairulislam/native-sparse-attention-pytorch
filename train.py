@@ -16,6 +16,7 @@ from native_sparse_attention_pytorch.compress_networks import (
     AttentionPool,
     GroupedMLP
 )
+from utils import Benchmark
 
 # constants
 
@@ -79,6 +80,9 @@ elif USE_FLEX_FOR_FINE_SELECTION:
     print('using flex attn')
 else:
     print('sparse attn in regular pytorch')
+
+DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(f'device: {DEVICE}')
 
 # model
 
@@ -149,6 +153,8 @@ wandb.init(project = PROJECT_NAME, mode = 'disabled' if not WANDB_ONLINE else 'o
 wandb.run.name = RUN_NAME
 wandb.run.save()
 
+benchmark = Benchmark(device = DEVICE)
+
 # training
 
 for i in tqdm(range(NUM_BATCHES), mininterval = 10.0, desc = "training"):
@@ -198,3 +204,5 @@ for i in tqdm(range(NUM_BATCHES), mininterval = 10.0, desc = "training"):
         base_decode_output = decode_tokens(sampled[0])
 
         print(f"\n{base_decode_output}\n")
+
+benchmark.stop()
